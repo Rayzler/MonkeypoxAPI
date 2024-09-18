@@ -26,8 +26,8 @@ export class CaseController {
             });
             res.json(newCase);
         } catch (error) {
-            res.json({
-                message: "Error al registrar el caso"
+            res.status(500).json({
+                message: "Error registering case"
             });
         }
     };
@@ -36,9 +36,14 @@ export class CaseController {
         try {
             const { id } = req.params;
             const incident = await CaseModel.findById(id);
+            if (!incident) {
+                return res.status(404).json({
+                    message: "Caso no encontrado"
+                });
+            }
             return res.json(incident);
         } catch (error) {
-            return res.json({
+            return res.status(500).json({
                 message: "Error al obtener el caso"
             });
         }
@@ -56,7 +61,7 @@ export class CaseController {
             });
             return res.json(cases);
         } catch (error) {
-            return res.json({
+            return res.status(500).json({
                 message: "Error al obtener los casos"
             });
         }
@@ -73,9 +78,14 @@ export class CaseController {
                 age
             });
             const updatedCase = await CaseModel.findById(id);
+            if (!updatedCase) {
+                return res.status(404).json({
+                    message: "Caso no encontrado"
+                });
+            }
             return res.json(updatedCase);
         } catch (error) {
-            return res.json({
+            return res.status(500).json({
                 message: "Error al actualizar el caso"
             });
         }
@@ -86,10 +96,10 @@ export class CaseController {
             const { id } = req.params;
             await CaseModel.findByIdAndDelete(id);
             return res.json({
-                message: "Case deleted"
+                message: "Caso eliminado"
             });
         } catch (error) {
-            return res.json({
+            return res.status(500).json({
                 message: "Error al eliminar el caso"
             });
         }
