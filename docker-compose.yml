@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  monkeypox-api:
+    image: rayzler/monkeypox_api:latest
+    container_name: monkeypox_api
+    environment:
+      - PORT=${PORT}
+      - MONGO_URL=${MONGO_URL}
+      - MAIL_SECRET_KEY=${MAIL_SECRET_KEY}
+      - MAIL_SERVICE=${MAIL_SERVICE}
+      - MAIL_USER=${MAIL_USER}
+      - MAPBOX_TOKEN=${MAPBOX_TOKEN}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_volume:/data/db
+
+volumes:
+  mongodb_volume:
